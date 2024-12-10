@@ -3,104 +3,60 @@
 # @samkovacs
 
 matrix = []
-sams = []
 num_solutions = 0
 
-with open("day4_testinput.txt") as f:
+with open("day4_input.txt") as f:
     text = f.readlines()
     for line in text:
-        row = list(line)
-        row.pop(-1)
-        matrix.append(row)
-
-    print(matrix)
+        line = list(line)
+        line.pop(-1)
+        matrix.append(line)
 
     for row_index, row in enumerate(matrix):
         for col_index, value in enumerate(row):
-            print(f" value is {value.lower()}")
-            if value.lower() == "s":
-                if (
-                    row_index + 2 < len(matrix[row_index])
-                    and matrix[row_index + 2][col_index].lower() == "s"
-                ):
-                    print(
-                        f"Checking {matrix[row_index + 2][col_index].lower()} is equal to {value.lower()} (Row_Index: {row_index+1} Col_Index: {col_index+1} Len_Matrix: {len(matrix[row_index])}"
-                    )
-                    if (
-                        col_index + 1 < len(matrix[row_index])
-                        and row_index + 1 < len(matrix[row_index])
-                        and matrix[row_index + 1][col_index + 1].lower() == "a"
-                    ):
-                        print(
-                            f"Checking {matrix[row_index+1][col_index+1].lower()} is equal to a"
-                        )
-                        if (
-                            col_index + 2 < len(matrix[row_index])
-                            and row_index + 2 < len(matrix[row_index])
-                            and matrix[row_index][col_index + 2].lower() == "m"
-                            and matrix[row_index + 2][col_index + 2].lower() == "m"
-                        ):
-                            print("Solution Found: ", num_solutions)
-                            num_solutions += 1
-                        else:
-                            print("nope")
-                            continue
-                    elif (
-                        col_index - 1 >= 0
-                        and row_index + 1 < len(matrix[row_index])
-                        and matrix[row_index + 1][col_index - 1].lower() == "a"
-                    ):
-                        print(
-                            f"Checking {matrix[row_index +1][col_index-1].lower()} is equal to a. Col_Index: {col_index-1}"
-                        )
-                        if (
-                            row_index + 2 < len(matrix[row_index])
-                            and col_index - 2 >= 0
-                            and matrix[row_index][col_index - 2].lower() == "m"
-                            and matrix[row_index + 2][col_index - 2].lower() == "m"
-                        ):
-                            print("Solution Found: ", num_solutions)
-                            num_solutions += 1
-                        else:
-                            print("nope")
-                            continue
-                    else:
-                        print("nope")
-                        continue
-                else:
+            if value.lower() == "a":
+                if (row_index - 1 < 0) or (col_index - 1 < 0):
                     continue
-                if (
-                    col_index + 2 < len(matrix[row_index])
-                    and matrix[row_index][col_index + 2].lower() == "s"
-                ):
-                    if (
-                        row_index + 1 < len(matrix[row_index])
-                        and col_index + 1 < len(matrix[row_index])
-                        and matrix[row_index + 1][col_index + 1].lower() == "a"
-                    ):
-                        if (
-                            row_index + 2 < len(matrix[row_index])
-                            and col_index + 2 < len(matrix[row_index])
-                            and matrix[row_index + 2][col_index].lower() == "m"
-                            and matrix[row_index + 2][col_index + 2].lower() == "m"
-                        ):
-                            num_solutions += 1
-                        else:
-                            continue
-                    elif (
-                        row_index - 1 >= 0
-                        and col_index < len(matrix[row_index])
-                        and matrix[row_index - 1][col_index + 1].lower() == "a"
-                    ):
-                        if (
-                            row_index - 2 >= 0
-                            and col_index + 2 < len(matrix[row_index])
-                            and matrix[row_index - 2][col_index].lower() == "m"
-                            and matrix[row_index - 2][col_index + 2].lower() == "m"
-                        ):
-                            num_solutions += 1
-                        else:
-                            continue
-                    else:
+                else:
+                    try:
+                        up_left = matrix[row_index - 1][col_index - 1]
+                    except IndexError:
                         continue
+                    try:
+                        up_right = matrix[row_index - 1][col_index + 1]
+                    except IndexError:
+                        continue
+                    try:
+                        down_left = matrix[row_index + 1][col_index - 1]
+                    except IndexError:
+                        continue
+                    try:
+                        down_right = matrix[row_index + 1][col_index + 1]
+                    except IndexError:
+                        continue
+                    if (
+                        (up_left.lower() == "a")
+                        or (up_right.lower() == "a")
+                        or (down_left.lower() == "a")
+                        or (down_right.lower() == "a")
+                    ):
+                        continue
+                    elif (
+                        (up_left.lower() == "x")
+                        or (up_right.lower() == "x")
+                        or (down_left.lower() == "x")
+                        or (down_right.lower() == "x")
+                    ):
+                        continue
+                    elif (up_left == down_right) or (up_right == down_left):
+                        continue
+                    else:
+                        num_solutions += 1
+                        print(num_solutions)
+                        print([up_left, ".", up_right])
+                        print()
+                        print([".", value, "."])
+                        print()
+                        print([down_left, ".", down_right])
+
 print(num_solutions)
