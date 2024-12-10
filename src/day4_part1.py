@@ -31,22 +31,28 @@ def check_solutions(row_index, col_index):
 
 def check_up(i, j):
     is_solution = 0
+    current = matrix[i][j]
     try:
         for x in range(len(solution_map.keys())):
-            while i - x >= 0:
-                current = matrix[i - (x - 1)][j]
-                up = matrix[i - x][j]
-                print(
-                    f"Solution Check: Up: {up} Solution Map: {solution_map[current]} X: {x} I: {i} J: {j} Is_Solution: {is_solution}"
-                )
-                if solution_map[current] == up and x == len(solution_map.keys()) - 1:
-                    is_solution += 1
-                    break
-                elif solution_map[current] == up and x < len(solution_map.keys()) - 1:
-                    continue
-                else:
-                    break
+            up = matrix[i - (x + 1)][j]
+            print(
+                f"Solution Check: Up: {up} Solution Map: {solution_map[current]} X: {x} I: {i-(x+1)} J: {j} Is_Solution: {is_solution}"
+            )
+            if (
+                solution_map[current] == up
+                and x == len(solution_map.keys()) - 1
+                and i - (x + 1) >= 0
+            ):
+                is_solution += 1
+                break
+            elif solution_map[current] == up and x < len(solution_map.keys()) - 1:
+                current = up
+                continue
+            else:
+                break
     except IndexError:
+        return is_solution
+    except KeyError:
         return is_solution
 
     return is_solution
@@ -54,26 +60,29 @@ def check_up(i, j):
 
 def check_up_left(i, j):
     is_solution = 0
+    current = matrix[i][j]
     try:
         for x in range(len(solution_map.keys())):
-            while i - x >= 0 and j - x >= 0:
-                current = matrix[i - (x - 1)][j - (x - 1)]
-                up_left = matrix[i - x][j - x]
-                if (
-                    solution_map[current] == up_left
-                    and x == len(solution_map.keys()) - 1
-                ):
-                    is_solution += 1
-                    break
-                elif (
-                    solution_map[current] == up_left
-                    and x < len(solution_map.keys()) - 1
-                ):
-                    continue
-                else:
-                    break
+            up_left = matrix[i - (x + 1)][j - (x + 1)]
+            print(
+                f"Solution Check: Up: {up_left} Solution Map: {solution_map[current]} X: {x} I: {i-(x+1)} J: {j-(x+1)} Is_Solution: {is_solution}"
+            )
+            if (
+                solution_map[current] == up_left
+                and x == len(solution_map.keys()) - 1
+                and j - (x + 1) >= 0
+                and i - (x + 1) >= 0
+            ):
+                is_solution += 1
+                break
+            elif solution_map[current] == up_left and x < len(solution_map.keys()) - 1:
+                current = up_left
+                continue
+            else:
+                break
     except IndexError:
-        is_solution = 0
+        return is_solution
+    except KeyError:
         return is_solution
 
     return is_solution
@@ -81,24 +90,22 @@ def check_up_left(i, j):
 
 def check_up_right(i, j):
     is_solution = 0
+    current = matrix[i][j]
     try:
         for x in range(len(solution_map.keys())):
-            while i - x >= 0:
-                current = matrix[i - (x - 1)][j + (x - 1)]
-                up_right = matrix[i - x][j + x]
-                if (
-                    solution_map[current] == up_right
-                    and x == len(solution_map.keys()) - 1
-                ):
-                    is_solution += 1
-                    break
-                elif (
-                    solution_map[current] == up_right
-                    and x < len(solution_map.keys()) - 1
-                ):
-                    continue
-                else:
-                    break
+            up_right = matrix[i - (x + 1)][j + (x + 1)]
+            if (
+                solution_map[current] == up_right
+                and x == len(solution_map.keys()) - 1
+                and i - (x + 1) >= 0
+            ):
+                is_solution += 1
+                break
+            elif solution_map[current] == up_right and x < len(solution_map.keys()) - 1:
+                current = up_right
+                continue
+            else:
+                break
     except IndexError:
         return is_solution
 
@@ -107,18 +114,22 @@ def check_up_right(i, j):
 
 def check_left(i, j):
     is_solution = 0
+    current = matrix[i][j]
     try:
         for x in range(len(solution_map.keys())):
-            while j - x >= 0:
-                current = matrix[i][j - (x - 1)]
-                left = matrix[i][j - x]
-                if solution_map[current] == left and x == len(solution_map.keys()) - 1:
-                    is_solution += 1
-                    break
-                elif solution_map[current] == left and x < len(solution_map.keys()) - 1:
-                    continue
-                else:
-                    break
+            left = matrix[i][j - (x + 1)]
+            if (
+                solution_map[current] == left
+                and x == len(solution_map.keys()) - 1
+                and j - (x + 1) >= 0
+            ):
+                is_solution += 1
+                break
+            elif solution_map[current] == left and x < len(solution_map.keys()) - 1:
+                current = left
+                continue
+            else:
+                break
     except IndexError:
         return is_solution
 
@@ -127,14 +138,15 @@ def check_left(i, j):
 
 def check_right(i, j):
     is_solution = 0
+    current = matrix[i][j]
     try:
         for x in range(len(solution_map.keys())):
-            current = matrix[i][j + (x - 1)]
-            right = matrix[i][j + x]
+            right = matrix[i][j + (x + 1)]
             if solution_map[current] == right and x == len(solution_map.keys()) - 1:
                 is_solution += 1
                 break
             elif solution_map[current] == right and x < len(solution_map.keys()) - 1:
+                current = right
                 continue
             else:
                 break
@@ -146,14 +158,15 @@ def check_right(i, j):
 
 def check_down(i, j):
     is_solution = 0
+    current = matrix[i][j]
     try:
         for x in range(len(solution_map.keys())):
-            current = matrix[i + (x - 1)][j]
-            down = matrix[i + x][j]
+            down = matrix[i + (x + 1)][j]
             if solution_map[current] == down and x == len(solution_map.keys()) - 1:
                 is_solution += 1
                 break
             elif solution_map[current] == down and x < len(solution_map.keys()) - 1:
+                current = down
                 continue
             else:
                 break
@@ -165,22 +178,22 @@ def check_down(i, j):
 
 def check_down_left(i, j):
     is_solution = 0
+    current = matrix[i][j]
     try:
         for x in range(len(solution_map.keys())):
-            while j - x >= 0:
-                current = matrix[i + (x - 1)][j - (x - 1)]
-                down_left = matrix[i + x][j - x]
-                if (
-                    solution_map[current] == down_left
-                    and x == len(solution_map.keys()) - 1
-                ):
-                    is_solution += 1
-                    break
-                elif (
-                    solution_map[current] == down_left
-                    and x < len(solution_map.keys()) - 1
-                ):
-                    continue
+            down_left = matrix[i + (x + 1)][j - (x + 1)]
+            if (
+                solution_map[current] == down_left
+                and x == len(solution_map.keys()) - 1
+                and j - (x + 1) >= 0
+            ):
+                is_solution += 1
+                break
+            elif (
+                solution_map[current] == down_left and x < len(solution_map.keys()) - 1
+            ):
+                current = down_left
+                continue
             else:
                 break
     except IndexError:
@@ -191,10 +204,10 @@ def check_down_left(i, j):
 
 def check_down_right(i, j):
     is_solution = 0
+    current = matrix[i][j]
     try:
         for x in range(len(solution_map.keys())):
-            current = matrix[i + x][j + x]
-            down_right = matrix[i + x][j + x]
+            down_right = matrix[i + (x + 1)][j + (x + 1)]
             if (
                 solution_map[current] == down_right
                 and x == len(solution_map.keys()) - 1
@@ -202,6 +215,7 @@ def check_down_right(i, j):
                 is_solution += 1
                 break
             elif solution_map[current] == down_right and x < len(solution_map.keys()):
+                current = down_right
                 continue
             else:
                 break
@@ -211,7 +225,7 @@ def check_down_right(i, j):
     return is_solution
 
 
-with open("day4_testinput.txt") as f:
+with open("day4_input.txt") as f:
     text = f.readlines()
     for line in text:
         row = list(line)
